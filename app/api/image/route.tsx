@@ -122,12 +122,10 @@ export async function GET(req: NextRequest) {
             fontSize: '32px',
           }}
         >
-          {self && self.avatar_url !== null ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={self.avatar_url ?? ''} alt={`${fid}'s profile picture`} />
-          ) : (
-            fid
-          )}
+          {self && self.avatar_url !== null
+            ? // eslint-disable-next-line @next/next/no-img-element
+              fid
+            : fid}
         </div>
         {/* 1st circle */}
         {friends.slice(0, C1.size).map(({ fid, avatar_url }, i) => {
@@ -153,12 +151,10 @@ export async function GET(req: NextRequest) {
                 fontSize: '24px',
               }}
             >
-              {avatar_url !== null ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
-              ) : (
-                fid
-              )}
+              {avatar_url !== null
+                ? // eslint-disable-next-line @next/next/no-img-element
+                  fid
+                : fid}
             </div>
           );
         })}
@@ -186,12 +182,10 @@ export async function GET(req: NextRequest) {
                 fontSize: '24px',
               }}
             >
-              {avatar_url !== null ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
-              ) : (
-                fid
-              )}
+              {avatar_url !== null
+                ? // eslint-disable-next-line @next/next/no-img-element
+                  fid
+                : fid}
             </div>
           );
         })}
@@ -221,12 +215,10 @@ export async function GET(req: NextRequest) {
                   fontSize: '24px',
                 }}
               >
-                {avatar_url !== null ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
-                ) : (
-                  fid
-                )}
+                {avatar_url !== null
+                  ? // eslint-disable-next-line @next/next/no-img-element
+                    fid
+                  : fid}
               </div>
             );
           })}
