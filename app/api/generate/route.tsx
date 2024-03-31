@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     await redis.set(`farcaster_circle:execution:${fid}`, execution.execution_id);
     executionId = execution.execution_id;
   }
-  const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
+  const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/status`, {
     headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
   });
   const data = await res.json();
