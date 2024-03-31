@@ -2,6 +2,13 @@ import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 
 import { grayDark } from '@radix-ui/colors';
+import { Redis } from '@upstash/redis';
+
+// -----------------------------------------------------------------------------
+// Services
+// -----------------------------------------------------------------------------
+
+const redis = new Redis({ url: process.env.UPSTASH_URL, token: process.env.UPSTASH_TOKEN });
 
 // -----------------------------------------------------------------------------
 // Image
@@ -31,8 +38,26 @@ export async function GET(req: NextRequest) {
   // Fetch data
   // ---------------------------------------------------------------------------
 
-  const url = `https://api.dune.com/api/v1/query/3576941/results?fid=${fid}&limit=50`;
-  const res = await fetch(url, { headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY } });
+  // Try fetching execution ID from Redis.
+  let executionId = await redis.get(`execution:${fid}`);
+  if (!executionId) {
+    const executionRes = await fetch('https://api.dune.com/api/v1/query/3576941/execute', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Dune-API-Key': process.env.DUNE_API_KEY,
+      },
+      body: JSON.stringify({ fid }),
+    });
+    const execution = (await executionRes.json()) as { execution_id: string; state: string };
+    await redis.set(`execution:${fid}`, execution.execution_id);
+    executionId = execution.execution_id;
+  }
+
+  // Query execution.
+  const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
+    headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
+  });
   const data = (await res.json()).result.rows as {
     fid: number;
     fname: string;
