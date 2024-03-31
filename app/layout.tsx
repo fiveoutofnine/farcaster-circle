@@ -30,7 +30,6 @@ export const metadata: Metadata = {
   },
   other: {
     'fc:frame': 'vNext',
-    'fc:frame:image:aspect_ratio': '1:1',
     'fc:frame:image': 'https://farcaster-circle.vercel.app/static/og/home.png',
     'fc:frame:post_url': `${process.env.BASE_URL}/api/generate`,
     'fc:frame:button:1': 'See Your Circle',
