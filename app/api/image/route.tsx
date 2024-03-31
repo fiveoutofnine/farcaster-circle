@@ -48,6 +48,7 @@ export async function GET(req: NextRequest) {
         'X-Dune-API-Key': process.env.DUNE_API_KEY,
       },
       body: JSON.stringify({ query_parameters: { fid } }),
+      next: { revalidate: 0 },
     });
     const execution = (await executionRes.json()) as { execution_id: string; state: string };
     await redis.set(`farcaster_circle:execution:${fid}`, execution.execution_id);
@@ -57,6 +58,7 @@ export async function GET(req: NextRequest) {
   // Query execution.
   const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
     headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
+    next: { revalidate: 0 },
   });
   const data = await res.json();
   if (!data.is_execution_finished) {
@@ -264,5 +266,4 @@ export async function GET(req: NextRequest) {
 // Next.js config
 // -----------------------------------------------------------------------------
 
-export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
