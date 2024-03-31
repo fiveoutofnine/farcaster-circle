@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
             <meta name="fc:frame:button:1:action" content="link" />
             <meta
               name="fc:frame:button:1:target"
-              content="https://warpcast.com/~/compose?text=${encodeURIComponent('Here are my closest Farcaster friends. Click the frame to view your circles.')}&embeds[]=${encodeURIComponent(`https://farcaster-circle.vercel.app/share/${fid}`)}"
+              content="https://warpcast.com/~/compose?text=${encodeURIComponent('Here are my closest Farcaster friends. Click the frame to view your circles.')}&embeds[]=${encodeURIComponent(`https://farcaster-circle.vercel.app/circle/${fid}`)}"
             />
         </head>
       </html>`,
