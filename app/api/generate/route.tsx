@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
   // ---------------------------------------------------------------------------
 
   const { untrustedData } = await req.json();
+  // Default to dwr.
   const fid = untrustedData?.fid ?? 3;
 
   // ---------------------------------------------------------------------------
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
   // ---------------------------------------------------------------------------
 
   const title = 'Generate | Farcaster Circle';
-  const imageUrl = `https://farcaster-circle.vercel.app/api/image?fid=${fid}`;
+  const imageUrl = `${process.env.BASE_URL}/api/image?fid=${fid}`;
 
   return new NextResponse(
     `<!DOCTYPE html>
