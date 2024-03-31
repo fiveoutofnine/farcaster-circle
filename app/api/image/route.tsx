@@ -16,17 +16,6 @@ const redis = new Redis({ url: process.env.UPSTASH_URL, token: process.env.UPSTA
 
 export async function GET(req: NextRequest) {
   // ---------------------------------------------------------------------------
-  // Fonts
-  // ---------------------------------------------------------------------------
-
-  const robotoMono600 = fetch(
-    new URL(
-      '../../../node_modules/@fontsource/roboto-mono/files/roboto-mono-latin-600-normal.woff',
-      import.meta.url,
-    ),
-  ).then((res) => res.arrayBuffer());
-
-  // ---------------------------------------------------------------------------
   // Search params
   // ---------------------------------------------------------------------------
 
@@ -86,6 +75,8 @@ export async function GET(req: NextRequest) {
   const HEIGHT = 1320;
   const C0 = { r1: 216, r2: 0, size: 1 };
   const C1 = { r1: 144, r2: (C0.r1 + 144) / 2 + 32, size: 8 };
+  const C2 = { r1: 128, r2: (C0.r1 + C1.r1 + 128) / 2 + 128, size: 16 };
+  const C3 = { r1: 120, r2: (C0.r1 + C1.r1 + C2.r1 + 112) / 2 + 224, size: 24 };
 
   return new ImageResponse(
     (
@@ -116,7 +107,6 @@ export async function GET(req: NextRequest) {
             background: grayDark.gray2,
             borderColor: grayDark.gray6,
             color: grayDark.gray12,
-            fontFamily: 'Roboto_Mono_600',
             fontSize: '32px',
           }}
         >
@@ -147,7 +137,6 @@ export async function GET(req: NextRequest) {
                 background: grayDark.gray2,
                 borderColor: grayDark.gray6,
                 color: grayDark.gray12,
-                fontFamily: 'Roboto_Mono_600',
                 fontSize: '24px',
               }}
             >
@@ -160,6 +149,72 @@ export async function GET(req: NextRequest) {
             </div>
           );
         })}
+        {/* 2nd circle */}
+        {friends.slice(C1.size, C1.size + C2.size).map(({ fid, avatar_url }, i) => {
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                borderRadius: '100%',
+                overflow: 'hidden',
+                border: '6px solid',
+                height: `${C2.r1}px`,
+                width: `${C2.r1}px`,
+                left: `${(WIDTH - C2.r1) / 2 + C2.r2 * Math.cos((i * 2 * Math.PI) / C2.size)}px`,
+                top: `${(HEIGHT - C2.r1) / 2 + C2.r2 * Math.sin((i * 2 * Math.PI) / C2.size)}px`,
+                position: 'absolute',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: grayDark.gray2,
+                borderColor: grayDark.gray6,
+                color: grayDark.gray12,
+                fontSize: '24px',
+              }}
+            >
+              {avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatar_url} alt={`${fid}`} />
+              ) : (
+                fid
+              )}
+            </div>
+          );
+        })}
+        {/* 3rd circle */}
+        {friends
+          .slice(C1.size + C2.size, C1.size + C2.size + C3.size)
+          .map(({ fid, avatar_url }, i) => {
+            return (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  borderRadius: '100%',
+                  overflow: 'hidden',
+                  border: '6px solid',
+                  height: `${C3.r1}px`,
+                  width: `${C3.r1}px`,
+                  left: `${(WIDTH - C3.r1) / 2 + C3.r2 * Math.cos((i * 2 * Math.PI) / C3.size)}px`,
+                  top: `${(HEIGHT - C3.r1) / 2 + C3.r2 * Math.sin((i * 2 * Math.PI) / C3.size)}px`,
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: grayDark.gray2,
+                  borderColor: grayDark.gray6,
+                  color: grayDark.gray12,
+                  fontSize: '24px',
+                }}
+              >
+                {avatar_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatar_url} alt={`${fid}`} />
+                ) : (
+                  fid
+                )}
+              </div>
+            );
+          })}
         <div
           style={{
             display: 'flex',
@@ -176,7 +231,6 @@ export async function GET(req: NextRequest) {
             paddingBottom: '12px',
             paddingTop: '12px',
             color: grayDark.gray12,
-            fontFamily: 'Roboto_Mono_600',
             fontSize: '28px',
           }}
         >
@@ -187,7 +241,6 @@ export async function GET(req: NextRequest) {
     {
       width: WIDTH,
       height: HEIGHT,
-      fonts: [{ name: 'Roboto_Mono_600', data: await robotoMono600, weight: 600 }],
     },
   );
 }
@@ -196,4 +249,4 @@ export async function GET(req: NextRequest) {
 // Next.js config
 // -----------------------------------------------------------------------------
 
-export const runtime = 'edge';
+export const maxDuration = 300;
