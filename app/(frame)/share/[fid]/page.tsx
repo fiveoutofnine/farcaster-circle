@@ -15,13 +15,9 @@ export default function Page({ params: { fid } }: { params: { fid: string } }) {
           name="fc:frame:image"
           content={`https://farcaster-circle.vercel.app/api/image?fid=${fid}`}
         />
-        <meta name="fc:frame:button:1" content="Share Results" />
-        <meta name="fc:frame:button:1:action" content="link" />
-        <meta
-          name="fc:frame:button:1:target"
-          content={`https://warpcast.com/~/compose?text=${encodeURIComponent(`Here+are+my+closest+Farcaster+friends.+Click+the+frame+to+view+your+circles.
-&embeds[]=https://farcaster-circle.vercel.app/share/${fid}`)}`}
-        />
+        <meta name="fc:frame:post_url" content="https://farcaster-circle.vercel.app/api/generate" />
+        <meta name="fc:frame:button:1" content="See Your Circle" />
+        <meta name="fc:frame:button:1:action" content="post" />
       </head>
     </html>
   );
