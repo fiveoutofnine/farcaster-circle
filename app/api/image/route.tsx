@@ -68,6 +68,7 @@ export async function GET(req: NextRequest) {
     avatar_url: string | null;
     total_points: number;
   }[];
+  console.log(rows);
 
   // Filter out self. We don't need to sort because the API already returns a
   // sorted list.
