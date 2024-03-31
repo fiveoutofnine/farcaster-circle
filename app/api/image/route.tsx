@@ -16,17 +16,6 @@ const redis = new Redis({ url: process.env.UPSTASH_URL, token: process.env.UPSTA
 
 export async function GET(req: NextRequest) {
   // ---------------------------------------------------------------------------
-  // Fonts
-  // ---------------------------------------------------------------------------
-
-  const robotoMono600 = fetch(
-    new URL(
-      '../../../node_modules/@fontsource/roboto-mono/files/roboto-mono-latin-600-normal.woff',
-      import.meta.url,
-    ),
-  ).then((res) => res.arrayBuffer());
-
-  // ---------------------------------------------------------------------------
   // Search params
   // ---------------------------------------------------------------------------
 
@@ -48,6 +37,7 @@ export async function GET(req: NextRequest) {
         'X-Dune-API-Key': process.env.DUNE_API_KEY,
       },
       body: JSON.stringify({ query_parameters: { fid } }),
+      next: { revalidate: 0 },
     });
     const execution = (await executionRes.json()) as { execution_id: string; state: string };
     await redis.set(`farcaster_circle:execution:${fid}`, execution.execution_id);
@@ -57,6 +47,7 @@ export async function GET(req: NextRequest) {
   // Query execution.
   const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
     headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
+    next: { revalidate: 0 },
   });
   const data = await res.json();
   if (!data.is_execution_finished) {
@@ -116,13 +107,12 @@ export async function GET(req: NextRequest) {
             background: grayDark.gray2,
             borderColor: grayDark.gray6,
             color: grayDark.gray12,
-            fontFamily: 'Roboto_Mono_600',
             fontSize: '32px',
           }}
         >
-          {self && (self.avatar_url ?? null) !== null ? (
+          {self && self.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={self.avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+            <img src={self.avatar_url} alt={`${fid}`} />
           ) : (
             fid
           )}
@@ -147,13 +137,12 @@ export async function GET(req: NextRequest) {
                 background: grayDark.gray2,
                 borderColor: grayDark.gray6,
                 color: grayDark.gray12,
-                fontFamily: 'Roboto_Mono_600',
                 fontSize: '24px',
               }}
             >
-              {avatar_url !== null ? (
+              {avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                <img src={avatar_url} alt={`${fid}`} />
               ) : (
                 fid
               )}
@@ -180,13 +169,12 @@ export async function GET(req: NextRequest) {
                 background: grayDark.gray2,
                 borderColor: grayDark.gray6,
                 color: grayDark.gray12,
-                fontFamily: 'Roboto_Mono_600',
                 fontSize: '24px',
               }}
             >
-              {avatar_url !== null ? (
+              {avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                <img src={avatar_url} alt={`${fid}`} />
               ) : (
                 fid
               )}
@@ -215,13 +203,12 @@ export async function GET(req: NextRequest) {
                   background: grayDark.gray2,
                   borderColor: grayDark.gray6,
                   color: grayDark.gray12,
-                  fontFamily: 'Roboto_Mono_600',
                   fontSize: '24px',
                 }}
               >
-                {avatar_url !== null ? (
+                {avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                  <img src={avatar_url} alt={`${fid}`} />
                 ) : (
                   fid
                 )}
@@ -244,7 +231,6 @@ export async function GET(req: NextRequest) {
             paddingBottom: '12px',
             paddingTop: '12px',
             color: grayDark.gray12,
-            fontFamily: 'Roboto_Mono_600',
             fontSize: '28px',
           }}
         >
@@ -255,7 +241,6 @@ export async function GET(req: NextRequest) {
     {
       width: WIDTH,
       height: HEIGHT,
-      fonts: [{ name: 'Roboto_Mono_600', data: await robotoMono600, weight: 600 }],
     },
   );
 }
@@ -264,4 +249,4 @@ export async function GET(req: NextRequest) {
 // Next.js config
 // -----------------------------------------------------------------------------
 
-export const runtime = 'edge';
+export const maxDuration = 300;
