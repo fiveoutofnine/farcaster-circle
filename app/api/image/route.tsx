@@ -124,7 +124,7 @@ export async function GET(req: NextRequest) {
         >
           {self && self.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={self.avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+            <img src={self.avatar_url} alt={`${fid}`} />
           ) : (
             fid
           )}
@@ -155,7 +155,7 @@ export async function GET(req: NextRequest) {
             >
               {avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                <img src={avatar_url} alt={`${fid}`} />
               ) : (
                 fid
               )}
@@ -188,7 +188,7 @@ export async function GET(req: NextRequest) {
             >
               {avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                <img src={avatar_url} alt={`${fid}`} />
               ) : (
                 fid
               )}
@@ -223,7 +223,7 @@ export async function GET(req: NextRequest) {
               >
                 {avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatar_url ?? ''} alt={`${fid}'s profile picture`} />
+                  <img src={avatar_url} alt={`${fid}`} />
                 ) : (
                   fid
                 )}
