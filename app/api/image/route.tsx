@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     ),
     {
       width: 1200,
-      height: 630,
+      height: 1200,
       fonts: [{ name: 'Roboto_Mono_400', data: await robotoMono400, weight: 400 }],
     },
   );
