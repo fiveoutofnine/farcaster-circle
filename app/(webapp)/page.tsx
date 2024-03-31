@@ -13,14 +13,14 @@ export default function Home() {
         <div className="flex w-full flex-col gap-1">
           <a
             className="flex h-8 w-full items-center justify-center gap-1.5 rounded border border-gray-7 bg-gray-3 px-3 text-sm font-medium transition-colors hover:border-gray-8 hover:bg-gray-4 active:bg-gray-5"
-            href="https://github.com/fiveoutofnine"
+            href="https://github.com/fiveoutofnine/farcaster-circle"
             target="_blank"
             rel="noopener noreferrer"
           >
             <span className="flex size-4 w-4 items-center justify-center">
               <Github />
             </span>
-            <span>@fiveoutofnine</span>
+            <span>fiveoutofnine/farcaster-circle</span>
           </a>
         </div>
       </div>
