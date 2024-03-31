@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
   // ---------------------------------------------------------------------------
 
   // Try fetching execution ID from Redis.
-  let executionId = await redis.get(`execution:${fid}`);
+  let executionId = await redis.get(`farcaster_circle:execution:${fid}`);
   if (!executionId) {
     const executionRes = await fetch('https://api.dune.com/api/v1/query/3576941/execute', {
       method: 'POST',
@@ -47,10 +47,10 @@ export async function GET(req: NextRequest) {
         'Content-Type': 'application/json',
         'X-Dune-API-Key': process.env.DUNE_API_KEY,
       },
-      body: JSON.stringify({ fid }),
+      body: JSON.stringify({ query_parameters: { fid } }),
     });
     const execution = (await executionRes.json()) as { execution_id: string; state: string };
-    await redis.set(`execution:${fid}`, execution.execution_id);
+    await redis.set(`farcaster_circle:execution:${fid}`, execution.execution_id);
     executionId = execution.execution_id;
   }
 
@@ -58,7 +58,11 @@ export async function GET(req: NextRequest) {
   const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
     headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
   });
-  const data = (await res.json()).result.rows as {
+  const data = await res.json();
+  if (!data.is_execution_finished) {
+    return new Response('Execution is not finished yet.', { status: 202 });
+  }
+  const rows = data.result.rows as {
     fid: number;
     fname: string;
     avatar_url: string | null;
@@ -67,10 +71,10 @@ export async function GET(req: NextRequest) {
 
   // Filter out self. We don't need to sort because the API already returns a
   // sorted list.
-  const friends = data.filter((friend) => friend.fid !== fid);
+  const friends = rows.filter((friend) => friend.fid !== fid);
 
   // Try to find self.
-  const self = data.find((friend) => friend.fid === fid);
+  const self = rows.find((friend) => friend.fid === fid);
 
   // ---------------------------------------------------------------------------
   // Constants
