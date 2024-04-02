@@ -2,17 +2,6 @@ import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 
 import { grayDark } from '@radix-ui/colors';
-import { Redis } from '@upstash/redis';
-
-// -----------------------------------------------------------------------------
-// Services
-// -----------------------------------------------------------------------------
-
-const redis = new Redis({ url: process.env.UPSTASH_URL, token: process.env.UPSTASH_TOKEN });
-
-// -----------------------------------------------------------------------------
-// Image
-// -----------------------------------------------------------------------------
 
 export async function GET(req: NextRequest) {
   // ---------------------------------------------------------------------------
@@ -27,45 +16,26 @@ export async function GET(req: NextRequest) {
   // Fetch data
   // ---------------------------------------------------------------------------
 
-  // Try fetching execution ID from Redis.
-  let executionId = await redis.get(`farcaster_circle:execution:${fid}`);
-  if (!executionId) {
-    const executionRes = await fetch('https://api.dune.com/api/v1/query/3576941/execute', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Dune-API-Key': process.env.DUNE_API_KEY,
-      },
-      body: JSON.stringify({ query_parameters: { fid } }),
-      next: { revalidate: 0 },
-    });
-    const execution = (await executionRes.json()) as { execution_id: string; state: string };
-    await redis.set(`farcaster_circle:execution:${fid}`, execution.execution_id);
-    executionId = execution.execution_id;
-  }
-
-  // Query execution.
-  const res = await fetch(`https://api.dune.com/api/v1/execution/${executionId}/results?limit=50`, {
-    headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY },
-    next: { revalidate: 0 },
-  });
+  // Query data.
+  const res = await fetch(
+    `https://api.dune.com/api/v1/query/3585040/results?limit=50&columns=friend_avatar_url,friend_fid&filters=fid=${fid}`,
+    { headers: { 'X-Dune-API-Key': process.env.DUNE_API_KEY } },
+  );
   const data = await res.json();
   if (!data.is_execution_finished) {
     return new Response('Execution is not finished yet.', { status: 202 });
   }
   const rows = data.result.rows as {
-    fid: number;
-    fname: string;
-    avatar_url: string | null;
-    total_points: number;
+    friend_fid: number;
+    friend_avatar_url: string | null;
   }[];
 
   // Filter out self. We don't need to sort because the API already returns a
   // sorted list.
-  const friends = rows.filter((friend) => friend.fid !== fid);
+  const friends = rows.filter((friend) => friend.friend_fid !== fid);
 
   // Try to find self.
-  const self = rows.find((friend) => friend.fid === fid);
+  const self = rows.find((friend) => friend.friend_fid === fid);
 
   // ---------------------------------------------------------------------------
   // Constants
@@ -110,15 +80,15 @@ export async function GET(req: NextRequest) {
             fontSize: '32px',
           }}
         >
-          {self && self.avatar_url ? (
+          {self && self.friend_avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={self.avatar_url} alt={`${fid}`} width={C0.r1} height={C0.r1} />
+            <img src={self.friend_avatar_url} alt={`${fid}`} width={C0.r1} height={C0.r1} />
           ) : (
             fid
           )}
         </div>
         {/* 1st circle */}
-        {friends.slice(0, C1.size).map(({ fid, avatar_url }, i) => {
+        {friends.slice(0, C1.size).map(({ friend_fid, friend_avatar_url }, i) => {
           return (
             <div
               key={i}
@@ -140,17 +110,17 @@ export async function GET(req: NextRequest) {
                 fontSize: '24px',
               }}
             >
-              {avatar_url ? (
+              {friend_avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url} alt={`${fid}`} width={C1.r1} height={C1.r1} />
+                <img src={friend_avatar_url} alt={`${fid}`} width={C1.r1} height={C1.r1} />
               ) : (
-                fid
+                friend_fid
               )}
             </div>
           );
         })}
         {/* 2nd circle */}
-        {friends.slice(C1.size, C1.size + C2.size).map(({ fid, avatar_url }, i) => {
+        {friends.slice(C1.size, C1.size + C2.size).map(({ friend_fid, friend_avatar_url }, i) => {
           return (
             <div
               key={i}
@@ -172,11 +142,11 @@ export async function GET(req: NextRequest) {
                 fontSize: '24px',
               }}
             >
-              {avatar_url ? (
+              {friend_avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatar_url} alt={`${fid}`} width={C2.r1} height={C2.r1} />
+                <img src={friend_avatar_url} alt={`${fid}`} width={C2.r1} height={C2.r1} />
               ) : (
-                fid
+                friend_fid
               )}
             </div>
           );
@@ -184,7 +154,7 @@ export async function GET(req: NextRequest) {
         {/* 3rd circle */}
         {friends
           .slice(C1.size + C2.size, C1.size + C2.size + C3.size)
-          .map(({ fid, avatar_url }, i) => {
+          .map(({ friend_fid, friend_avatar_url }, i) => {
             return (
               <div
                 key={i}
@@ -206,11 +176,11 @@ export async function GET(req: NextRequest) {
                   fontSize: '24px',
                 }}
               >
-                {avatar_url ? (
+                {friend_avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatar_url} alt={`${fid}`} width={C3.r1} height={C3.r1} />
+                  <img src={friend_avatar_url} alt={`${fid}`} width={C3.r1} height={C3.r1} />
                 ) : (
-                  fid
+                  friend_fid
                 )}
               </div>
             );
@@ -234,7 +204,7 @@ export async function GET(req: NextRequest) {
             fontSize: '28px',
           }}
         >
-          {self?.fname ?? fid}&apos;s Farcaster Circle
+          {self?.friend_fid ?? fid}&apos;s Farcaster Circle
         </div>
       </div>
     ),
