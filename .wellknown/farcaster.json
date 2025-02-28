@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjczMywidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDIwMkMyMmIyMUI3NjZEZjNBQzUyODlEZmM1Q2JmNkM3QTEwMUNhMEIifQ",
+    "payload": "eyJkb21haW4iOiJmYXJjYXN0ZXItY2lyY2xlLnZlcmNlbC5hcHAifQ",
+    "signature": "MHgwZGJjNjhjZmIzMmUxMWRmZjE0N2I4ZmNhZDMxODc1NTU3NWRmMTFiMzRhZWEwYmMwZTgyZmNjN2Y3OTRkZjY5M2EyMDZmYWVlZDZiMTVkOGQyZWQ5OTU2MGUzYmZlMTdmYzEwZjAwMGI5NTk4OTllNWE4NTc0MmY4ZGUwOTM3YTFi"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Farcaster Circle",
+    "iconUrl": "https://farcaster-circle.vercel.app/icon.png",
+    "homeUrl": "https://farcaster-circle.vercel.app",
+    "imageUrl": "https://farcaster-circle.vercel.app/image.png",
+    "buttonTitle": "See Your Circle",
+    "splashImageUrl": "https://farcaster-circle.vercel.app/splash.png",
+    "splashBackgroundColor": "#000",
+    "webhookUrl": "https://farcaster-circle.vercel.app/api/webhook"
+  }
+}
