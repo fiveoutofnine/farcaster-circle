@@ -8,7 +8,7 @@
     "version": "1",
     "name": "Farcaster Circle",
     "iconUrl": "https://farcaster-circle.vercel.app/icon.png",
-    "homeUrl": "https://farcaster-circle.vercel.app",
+    "homeUrl": "https://farcaster-circle.vercel.app/v2",
     "imageUrl": "https://farcaster-circle.vercel.app/image.png",
     "buttonTitle": "See Your Circle",
     "splashImageUrl": "https://farcaster-circle.vercel.app/splash.png",

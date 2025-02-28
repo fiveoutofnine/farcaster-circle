@@ -1,24 +1,24 @@
-import { Inter } from 'next/font/google';
-
-import '../globals.css';
-import clsx from 'clsx';
+import type { Metadata } from 'next';
+import { Fragment } from 'react';
 
 // -----------------------------------------------------------------------------
-// Fonts
+// Metadata
 // -----------------------------------------------------------------------------
 
-const inter = Inter({ subsets: ['latin'] });
+export const metadata: Metadata = {
+  other: {
+    'fc:frame': 'vNext',
+    'fc:frame:image': 'https://farcaster-circle.vercel.app/static/og/home.png',
+    'fc:frame:post_url': `${process.env.BASE_URL}/api/generate`,
+    'fc:frame:button:1': 'See Your Circle',
+    'fc:frame:button:1:action': 'post',
+  },
+};
 
 // -----------------------------------------------------------------------------
 // Layout
 // -----------------------------------------------------------------------------
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" style={{ background: 'var(--gray1)' }}>
-      <body className={clsx(inter.className, 'relative flex min-h-screen w-full flex-col')}>
-        {children}
-      </body>
-    </html>
-  );
+  return <Fragment>{children}</Fragment>;
 }
