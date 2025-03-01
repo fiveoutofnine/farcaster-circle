@@ -7,11 +7,11 @@
   "frame": {
     "version": "1",
     "name": "Farcaster Circle",
-    "iconUrl": "https://farcaster-circle.vercel.app/icon.png",
+    "iconUrl": "https://farcaster-circle.vercel.app/static/images/apple-touch-icon.png",
     "homeUrl": "https://farcaster-circle.vercel.app/v2",
-    "imageUrl": "https://farcaster-circle.vercel.app/image.png",
+    "imageUrl": "https://farcaster-circle.vercel.app/static/og/home-3x2.png",
     "buttonTitle": "See Your Circle",
-    "splashImageUrl": "https://farcaster-circle.vercel.app/splash.png",
+    "splashImageUrl": "https://farcaster-circle.vercel.app/static/images/apple-touch-icon.png",
     "splashBackgroundColor": "#000",
     "webhookUrl": "https://farcaster-circle.vercel.app/api/webhook"
   }
