@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 
-// Use dynamic import with SSR disabled for the client component.
+// import dynamic from 'next/dynamic';
+import FarcasterCircleVisualizer from './(components)/farcaster-circle-visualizer';
+
+/* // Use dynamic import with SSR disabled for the client component.
 const FarcasterCircleVisualizer = dynamic(
   () => import('./(components)/farcaster-circle-visualizer'),
   { ssr: false },
-);
+); */
 
 // -----------------------------------------------------------------------------
 // Metadata
