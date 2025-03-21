@@ -21,6 +21,8 @@ const frame = {
       type: 'launch_frame',
       name: 'Farcaster Circle',
       url: `${BASE_URL}/v2`,
+      splashImageUrl: 'https://fiveoutofnine.com/images/apple-touch-icon.png',
+      splashBackgroundColor: '#000',
     },
   },
 };
