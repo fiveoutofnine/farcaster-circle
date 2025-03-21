@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { Fragment } from 'react';
+import { Inter } from 'next/font/google';
 
 import './globals.css';
+import clsx from 'clsx';
 
 // -----------------------------------------------------------------------------
 // Metadata
@@ -26,14 +27,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     creator: '@fiveoutofnine',
+    creatorId: '1269561030272643076',
     images: ['https://farcaster-circle.vercel.app/static/og/home.png'],
-  },
-  other: {
-    'fc:frame': 'vNext',
-    'fc:frame:image': 'https://farcaster-circle.vercel.app/static/og/home.png',
-    'fc:frame:post_url': `${process.env.BASE_URL}/api/generate`,
-    'fc:frame:button:1': 'See Your Circle',
-    'fc:frame:button:1:action': 'post',
   },
 };
 
@@ -46,9 +41,21 @@ export const viewport: Viewport = {
 };
 
 // -----------------------------------------------------------------------------
+// Fonts
+// -----------------------------------------------------------------------------
+
+const inter = Inter({ subsets: ['latin'] });
+
+// -----------------------------------------------------------------------------
 // Layout
 // -----------------------------------------------------------------------------
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <Fragment>{children}</Fragment>;
+  return (
+    <html lang="en" style={{ background: 'var(--gray1)' }}>
+      <body className={clsx(inter.className, 'relative flex min-h-screen w-full flex-col')}>
+        {children}
+      </body>
+    </html>
+  );
 }
