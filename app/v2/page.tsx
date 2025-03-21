@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
-// Use dynamic import with SSR disabled for the client component
+// Use dynamic import with SSR disabled for the client component.
 const FarcasterCircleVisualizer = dynamic(
-  () => import('./(components)/FarcasterCircleVisualizer'),
-  {
-    ssr: false,
-  },
+  () => import('./(components)/farcaster-circle-visualizer'),
+  { ssr: false },
 );
 
 // -----------------------------------------------------------------------------
@@ -41,7 +39,7 @@ export function generateMetadata(): Metadata {
 // Page
 // -----------------------------------------------------------------------------
 
-export default function Page() {
+export default async function Page() {
   return (
     <main className="flex grow-[1] flex-col items-center justify-center bg-gray-1 px-4">
       <FarcasterCircleVisualizer />
